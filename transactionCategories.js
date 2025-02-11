@@ -1,0 +1,15 @@
+export const Categories = Object.freeze({
+  PRODUCTS: "Groceries",
+  ALCOHOL: "Alcohol",
+  ENTERTAINMENT: "Entertainment",
+  HEALTH: "Health",
+  TRANSPORT: "Transport",
+  HOUSING: "Household items",
+  TECHNIQUE: "Electronics",
+  COMMUNAL_COMMUNICATION: "Utilities and communication",
+  SPORTS_HOBBIES: "Sports and hobbies",
+  EDUCATION: "Education",
+  OTHER: "Other",
+  SALARY: "Salary",
+  ADDITIONAL_INCOME: "Additional income",
+});
