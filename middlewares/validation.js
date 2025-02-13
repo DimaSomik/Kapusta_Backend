@@ -3,6 +3,19 @@ import { Categories } from "../transactionCategories.js";
 
 import mongoose from "mongoose";
 
+/** Dodałam zmienną i podmieniłam w kodzie, żeby nie powtarzać ciągle w kodzie */
+const MAX_AMOUNT = 1000000000;
+
+/** Dodałam jedną funkcję do walidacji ObjectID, żeby nie powtarzać kodu */
+
+const isValidObjectId = (value, helpers) => {
+  const isValid = mongoose.Types.ObjectId.isValid(value);
+  if (!isValid) {
+    return helpers.message({ custom: "Invalid ObjectId" });
+  }
+  return value;
+};
+
 const schemas = {
   auth: Joi.object({
     email: Joi.string().email().required().messages({
@@ -17,25 +30,16 @@ const schemas = {
 
   refreshToken: Joi.object({
     sid: Joi.string()
-      .custom((value, helpers) => {
-        const isValidObjectId = mongoose.Types.ObjectId.isValid(value);
-        if (!isValidObjectId) {
-          return helpers.message({
-            custom: "Invalid 'sid'. Must be a MongoDB ObjectId",
-          });
-        }
-        return value;
-      })
-      .required(),
+      .custom(isValidObjectId).required(),
   }),
 
   userBalance: Joi.object({
-    newBalance: Joi.number().required().min(1).max(1000000000),
+    newBalance: Joi.number().required().min(1).max(MAX_AMOUNT),
   }),
 
   addExpsense: Joi.object({
     description: Joi.string().min(1).max(100).required(),
-    amount: Joi.number().required().min(1).max(1000000000),
+    amount: Joi.number().required().min(1).max(MAX_AMOUNT),
     date: Joi.string()
       .custom((value, helpers) => {
         const dateRegex = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/;
@@ -67,7 +71,7 @@ const schemas = {
 
   addIncome: Joi.object({
     description: Joi.string().min(1).max(300).required(),
-    amount: Joi.number().required().min(1).max(1000000000),
+    amount: Joi.number().required().min(1).max(MAX_AMOUNT),
     date: Joi.string()
       .custom((value, helpers) => {
         const dateRegex = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/;
@@ -88,16 +92,7 @@ const schemas = {
 
   deleteTransaction: Joi.object({
     transactionId: Joi.string()
-      .custom((value, helpers) => {
-        const isValidObjectId = mongoose.Types.ObjectId.isValid(value);
-        if (!isValidObjectId) {
-          return helpers.message({
-            custom: "Invalid 'transactionId'.",
-          });
-        }
-        return value;
-      })
-      .required(),
+    .custom(isValidObjectId).required(),
   }),
 
   period: Joi.object({

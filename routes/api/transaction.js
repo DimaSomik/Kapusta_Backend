@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { validateAddIncome, validateAddExpsense, validateDeleteTransaction, validatePeriod } from "../../middlewares/validation.js";
   
-import { authController } from "../../controllers/auth.js";
+// import { authController } from "../../controllers/auth.js"; <- wygląda na to, że nie jest używane, więc powinno być usunięte, żeby nie śmiecić
 import { transactionsController } from "../../controllers/transaction.js";
 import { isUserLogged } from "../../middlewares/isUserLogged.js";
 
