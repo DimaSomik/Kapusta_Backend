@@ -1,7 +1,55 @@
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { UserModel } from "../models/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { SessionModel } from "../models/session.js";
+
+/** Część kodu potrzebna do obsługi Google OAuth 2.0 */
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: `${process.env.BASE_URL}:${process.env.PORT}/auth/google/callback`,
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        let user = await UserModel.findOne({ googleId: profile.id });
+
+        if (!user) {
+
+          user = await UserModel.create({
+            googleId: profile.id,
+            email: profile.emails[0].value,
+            displayName: profile.displayName,
+            photo: profile.photos[0].value,
+            balance: 0,
+            transactions: [],
+          });
+        }
+
+        return done(null, user);
+      } catch (error) {
+        return done(error, null);
+      }
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user._id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await UserModel.findById(id);
+    done(null, user);
+  } catch (error) {
+    done(error, null);
+  }
+});
 
 export const authController = {
   register: async (req, res) => {
@@ -134,5 +182,40 @@ export const authController = {
     );
   
     return res.status(200).send({ newAccessToken, newRefreshToken, newSid: newSession._id });
-  }
+  },
+
+/** Część kodu potrzebna do obsługi Google OAuth 2.0 */
+googleLogin: passport.authenticate("google", {
+    scope: ["profile", "email"],
+  }),
+
+  googleCallback: (req, res, next) => {
+    passport.authenticate("google", async (err, user) => {
+      if (err || !user) {
+        /**Wymaga dodatkowego przetestowania po podłaczeniu frontend */
+        return res.redirect(`${process.env.FRONTEND_URL}/login?error=login_failed`);
+      }
+
+      const newSession = await SessionModel.create({
+        uid: user._id,
+      });
+
+      const accessToken = jwt.sign(
+        { uid: user._id, sid: newSession._id },
+        process.env.JWT_ACCESS_SECRET,
+        { expiresIn: process.env.JWT_ACCESS_EXPIRE_TIME }
+      );
+
+      const refreshToken = jwt.sign(
+        { uid: user._id, sid: newSession._id },
+        process.env.JWT_REFRESH_SECRET,
+        { expiresIn: process.env.JWT_REFRESH_EXPIRE_TIME }
+      );
+
+      res.redirect(
+        /**Wymaga dodatkowego przetestowania po podłaczeniu frontend */
+        `${process.env.FRONTEND_URL}/login-success?accessToken=${accessToken}&refreshToken=${refreshToken}&sid=${newSession._id}`
+      );
+    })(req, res, next);
+  },
 };

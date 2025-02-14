@@ -131,6 +131,11 @@ router.post("/register", validateAuth, authController.register);
 
 router.post("/login", validateAuth, authController.login);
 
+/** Logowanie i rejestracja przez Google  */
+
+router.get("/google", authController.googleLogin);
+router.get("/google/callback", authController.googleCallback);
+
 
 /**
  * @swagger
