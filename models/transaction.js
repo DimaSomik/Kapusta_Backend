@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-
 export const transactionSchema = new Schema(
   {
     description: {
       type: String,
       default: null,
+      trim: true /** trimowanie wartości*/,
     },
     amount: {
       type: Number,
@@ -24,4 +24,7 @@ export const transactionSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-export const TransactionModel = mongoose.model("transaction", transactionSchema);
+export const TransactionModel = mongoose.model(
+  "transaction",
+  transactionSchema
+);
