@@ -74,9 +74,9 @@ export const transactionsController = {
         date,
         category,
         _id: new mongoose.Types.ObjectId(),
-
-        /**filtrowanie transakcje na przychody i wydatki, co może być przydatne podczas generowania raportów finansowych lub statystyk, ułatwienie aktualizacji bilansu */
-        type: isIncome ? "income" : "expense",
+        type: isIncome /**filtrowanie transakcje na przychody i wydatki, co może być przydatne podczas generowania raportów finansowych lub statystyk, ułatwienie aktualizacji bilansu */
+          ? "income"
+          : "expense",
       };
       user.transactions.push(transaction);
       user.balance += isIncome ? amount : -amount;
