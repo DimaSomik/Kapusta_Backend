@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { UserModel } from '../models/user.js';
 import { SessionModel } from '../models/session.js';
+import { BlacklistModel } from '../models/blacklist.js';
 
 export const isUserLogged = async (req, res, next) => {
     const authorizationHeader = req.get("Authorization");
@@ -8,6 +9,12 @@ export const isUserLogged = async (req, res, next) => {
     if (authorizationHeader) {
       const accessToken = authorizationHeader.replace("Bearer ", "");
       try {
+
+        const blacklistedToken = await BlacklistModel.findOne({ token: accessToken });
+      if (blacklistedToken) {
+        return res.status(401).send({ message: "Token is blacklisted. Please log in again." });
+      }
+
         const payload = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
 
         const user = await UserModel.findById(payload.uid).select('-password'); /** Dodałam usuwanie hasła, żebyśmy przez przypadek go nie zwrócli */
