@@ -8,6 +8,8 @@ import setupSwagger from './swagger.js';
 
 import cors from "cors";
 
+import { removeExpiredTokens } from './utils/blacklistCleanup.js';
+
 const app = express();
 
 app.use(cors());
@@ -20,6 +22,9 @@ app.use("/transaction", transactionRouter);
 connectDB();
 
 setupSwagger(app);
+
+/** Odpalanie funkcji czyszczenia tokenów */
+setInterval(removeExpiredTokens, 60 * 1000);
 
 const port = process.env.PORT || 3000;
 

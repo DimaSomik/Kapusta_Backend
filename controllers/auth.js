@@ -4,6 +4,7 @@ import { UserModel } from "../models/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { SessionModel } from "../models/session.js";
+import { BlacklistModel } from "../models/blacklist.js";
 
 /** Część kodu potrzebna do obsługi Google OAuth 2.0 */
 
@@ -121,8 +122,18 @@ export const authController = {
   logout: async (req, res) => {
     try {
       const currentSession = req.session;
+
+      const accessToken = req.get("Authorization").replace("Bearer ", "");
+
+      const expiresIn = 60 * 60 * 1000; /** Usuwanie tokenów z black-list po godzinie */
+      const expiresAt = new Date(Date.now() + expiresIn);
+      
+      await BlacklistModel.create({
+      token: accessToken,
+      expiresAt: expiresAt,
+    });
+
       const result = await SessionModel.deleteOne({ _id: currentSession._id });
-  
       if (result.deletedCount === 0) {
         return res.status(400).send({ message: "Failed to log out. No session found." });
       }
