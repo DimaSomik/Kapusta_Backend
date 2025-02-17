@@ -8,6 +8,10 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Email is required"],
       unique: true,
+      match: [
+        /.+\@.+\..+/,
+        "Please fill a valid email address",
+      ] /** walidacja formatu email */,
     },
     passwordHash: {
       type: String,
@@ -15,7 +19,7 @@ const userSchema = new Schema(
     },
     googleId: {
       type: String,
-      unique: true
+      unique: true,
     },
     originUrl: {
       type: String,
