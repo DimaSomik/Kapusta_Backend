@@ -16,8 +16,6 @@ const months = [
   "December",
 ];
 
-/** Dodałam funkcję do obliczania statystyk miesiecznych, żeby wyeliminować powtarzający się kod dla incomeStats i expenseStats (zakomentowałam je później/ backward compatibility) */
-
 const calculateMonthlyStats = (transactions, currentYear) => {
   return months.reduce((stats, month, index) => {
     const monthTransactions = transactions.filter(({ date }) => {
@@ -34,19 +32,17 @@ const calculateMonthlyStats = (transactions, currentYear) => {
 };
 
 export const transactionsController = {
-  /** Jak dla mnie lepszą opcją będzie dodanie jednej funkcji zamiast powtarzania tego samego kodu dla addExpense i addIncome; dodałam również walidacje dla amount, żeby zawsze był numerem */
   addTransaction: async (req, res, isIncome) => {
     try {
       const user = req.user;
       const { description, amount, date, category } = req.body;
 
-      /** **Dodana walidacja amount** **/
       if (!amount || typeof amount !== "number") {
         return res
           .status(400)
           .send({ message: "Amount must be a valid number" });
       }
-      /** **Dodana walidacja description** **/
+      
       if (
         !description ||
         typeof description !== "string" ||
@@ -56,13 +52,13 @@ export const transactionsController = {
           .status(400)
           .send({ message: "Description must be a valid string" });
       }
-      /** **Dodana walidacja date** **/
+      
       if (!date || !/^\d{4}-(0[1-9]|1[012])$/.test(date)) {
         return res
           .status(400)
           .send({ message: "Date must be in the format YYYY-MM" });
       }
-      /** **Dodana walidacja category** **/
+
       if (!category || typeof category !== "string") {
         return res
           .status(400)
@@ -74,7 +70,7 @@ export const transactionsController = {
         date,
         category,
         _id: new mongoose.Types.ObjectId(),
-        type: isIncome /**filtrowanie transakcje na przychody i wydatki, co może być przydatne podczas generowania raportów finansowych lub statystyk, ułatwienie aktualizacji bilansu */
+        type: isIncome 
           ? "income"
           : "expense",
       };
@@ -91,7 +87,7 @@ export const transactionsController = {
     }
   },
 
-  /** **Zamiast dwóch funkcji, korzystamy z jednej wspólnej** **/
+  
   addExpense: async (req, res) =>
     transactionsController.addTransaction(req, res, false),
   addIncome: async (req, res) =>
@@ -111,7 +107,7 @@ export const transactionsController = {
       }
 
       const transaction = user.transactions[transactionIndex];
-      /**sposób na określenie, czy transakcja jest wydatkiem (expense) czy przychodem (income):  wyrażenie warunkowe (ternary operator)*/
+      
       user.balance +=
         transaction.type === "expense"
           ? transaction.amount
@@ -126,7 +122,7 @@ export const transactionsController = {
       res.status(500).send({ message: "Internal server error" });
     }
   },
-  /** Jedna funkcja dla incomeStats oraz expenseStats zamiast powtarzania kodu */
+  
   getStats: async (req, res, isIncome) => {
     try {
       const user = req.user;
