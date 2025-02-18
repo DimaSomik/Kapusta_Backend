@@ -12,8 +12,8 @@ router.post("/register", validateAuth, authController.register);
 
 router.post("/login", validateAuth, authController.login);
 
-router.get("/google", authController.googleLogin);
-router.get("/google/callback", authController.googleCallback);
+// router.get("/google", authController.googleLogin);
+// router.get("/google/callback", authController.googleCallback);
 
 router.post("/logout", isUserLogged, authController.logout);
 
