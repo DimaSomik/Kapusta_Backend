@@ -37,7 +37,7 @@ export const isUserLogged = async (req, res, next) => {
     } catch (err) {
       /** logowanie błędów*/
       console.error(err);
-      return res.status(401).send({ message: "Unauthorized" });
+      return res.status(401).send({ message: "Unauthorized." });
     }
   } else {
     return res.status(400).send({ message: "No token provided!" });

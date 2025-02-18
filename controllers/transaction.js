@@ -99,7 +99,7 @@ export const transactionsController = {
   getStats: async (req, res, isIncome) => {
     try {
       const user = req.user;
-      if (!user) return res.status(401).send({ message: "Unauthorized" });
+      if (!user) return res.status(401).send({ message: "Unauthorized!" });
 
       const currentYear = new Date().getFullYear();
       const transactions = user.transactions.filter(({ category }) =>
