@@ -37,33 +37,6 @@ export const transactionsController = {
       const user = req.user;
       const { description, amount, date, category } = req.body;
 
-      if (!amount || typeof amount !== "number") {
-        return res
-          .status(400)
-          .send({ message: "Amount must be a valid number" });
-      }
-      
-      if (
-        !description ||
-        typeof description !== "string" ||
-        description.trim() === ""
-      ) {
-        return res
-          .status(400)
-          .send({ message: "Description must be a valid string" });
-      }
-      
-      if (!date || !/^\d{4}-(0[1-9]|1[012])$/.test(date)) {
-        return res
-          .status(400)
-          .send({ message: "Date must be in the format YYYY-MM" });
-      }
-
-      if (!category || typeof category !== "string") {
-        return res
-          .status(400)
-          .send({ message: "Category must be a valid string" });
-      }
       const transaction = {
         description,
         amount,
