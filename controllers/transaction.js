@@ -81,10 +81,11 @@ export const transactionsController = {
 
       const transaction = user.transactions[transactionIndex];
       
-      user.balance +=
-        transaction.type === "expense"
-          ? transaction.amount
-          : -transaction.amount;
+      if (![Categories.SALARY, Categories.ADDITIONAL_INCOME].includes(transaction.category)) {
+        user.balance += transaction.amount;
+      } else {
+        user.balance -= transaction.amount;
+      }
 
       user.transactions.splice(transactionIndex, 1);
       await user.save();
