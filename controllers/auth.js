@@ -6,8 +6,6 @@ import jwt from "jsonwebtoken";
 import { SessionModel } from "../models/session.js";
 import { BlacklistModel } from "../models/blacklist.js";
 
-/** Część kodu potrzebna do obsługi Google OAuth 2.0 */
-
 passport.use(
   new GoogleStrategy(
     {
@@ -30,7 +28,6 @@ passport.use(
             transactions: [],
           });
         }
-
         return done(null, user);
       } catch (error) {
         return done(error, null);
@@ -125,7 +122,7 @@ export const authController = {
 
       const accessToken = req.get("Authorization").replace("Bearer ", "");
 
-      const expiresIn = 60 * 60 * 1000; /** Usuwanie tokenów z black-list po godzinie */
+      const expiresIn = 60 * 60 * 1000; 
       const expiresAt = new Date(Date.now() + expiresIn);
       
       await BlacklistModel.create({
