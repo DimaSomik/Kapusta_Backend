@@ -203,12 +203,6 @@ googleLogin: passport.authenticate("google", {
         /**Wymaga dodatkowego przetestowania po podłaczeniu frontend */
         return res.redirect(`${process.env.FRONTEND_URL}/?error=login_failed`);
       }
-        /**Nowa część kodu do sprawdzenia czy użytkowinik istnieje i jeśli tak to zwracamy błąd */
-      const existingUser = await UserModel.findOne({ email: user.email });
-
-      if (existingUser) {
-      return res.redirect(`${process.env.FRONTEND_URL}/?error=email_already_exists`);
-    }
 
       const newSession = await SessionModel.create({
         uid: user._id,
