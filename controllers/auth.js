@@ -204,7 +204,7 @@ googleLogin: passport.authenticate("google", {
     passport.authenticate("google", async (err, user) => {
       if (err || !user) {
         /**Wymaga dodatkowego przetestowania po podłaczeniu frontend */
-        return res.redirect(`${process.env.FRONTEND_URL}/login?error=login_failed`);
+        return res.redirect(`${process.env.FRONTEND_URL}/?error=login_failed`);
       }
 
       const newSession = await SessionModel.create({
@@ -225,7 +225,7 @@ googleLogin: passport.authenticate("google", {
 
       res.redirect(
         /**Wymaga dodatkowego przetestowania po podłaczeniu frontend */
-        `${process.env.FRONTEND_URL}/login-success?accessToken=${accessToken}&refreshToken=${refreshToken}&sid=${newSession._id}`
+        `${process.env.FRONTEND_URL}/transaction/expenses?accessToken=${accessToken}&refreshToken=${refreshToken}&sid=${newSession._id}`
       );
     })(req, res, next);
   },
