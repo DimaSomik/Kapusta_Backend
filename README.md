@@ -103,28 +103,28 @@ Visit the link to use the live version of the application.
   <tr>
     <td align="center">
       <a href="https://github.com/DimaSomik">
-        <img src="https://github.com/DimaSomik.png?size=100" width="100px;" style="border-radius: 50%;" alt="Dima Somik"/>
+        <img src="https://github.com/DimaSomik.png?size=50" width="50px;" style="border-radius: 50%;" alt="Dima Somik"/>
         <br /><b>Dima Somik</b>
       </a>
       <br />Team Leader
     </td>
     <td align="center">
       <a href="https://github.com/Piter30">
-        <img src="https://github.com/Piter30.png?size=100" width="100px;" style="border-radius: 50%;" alt="Piter30"/>
+        <img src="https://github.com/Piter30.png?size=50" width="50px;" style="border-radius: 50%;" alt="Piter30"/>
         <br /><b>Piotr Kowalski</b>
       </a>
       <br />Back-End Developer
     </td>
     <td align="center">
       <a href="https://github.com/AlicjaSzamraj">
-        <img src="https://github.com/AlicjaSzamraj.png?size=100" width="100px;" style="border-radius: 50%;" alt="Alicja Szamraj"/>
+        <img src="https://github.com/AlicjaSzamraj.png?size=50" width="50px;" style="border-radius: 50%;" alt="Alicja Szamraj"/>
         <br /><b>Alicja Szamraj</b>
       </a>
       <br />Back-End Developer
     </td>
     <td align="center">
       <a href="https://github.com/MagdalenaSiniawska">
-        <img src="https://github.com/MagdalenaSiniawska.png?size=100" width="100px;" style="border-radius: 50%;" alt="Magdalena Siniawska"/>
+        <img src="https://github.com/MagdalenaSiniawska.png?size=50" width="50px;" style="border-radius: 50%;" alt="Magdalena Siniawska"/>
         <br /><b>Magdalena Siniawska</b>
       </a>
       <br />Back-End Developer
