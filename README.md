@@ -122,4 +122,3 @@ Visit the link to use the live version of the application.
 
   </tr>
 </table>
-```
