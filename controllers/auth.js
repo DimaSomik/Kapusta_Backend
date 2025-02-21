@@ -200,9 +200,23 @@ googleLogin: passport.authenticate("google", {
   googleCallback: (req, res, next) => {
     passport.authenticate("google", async (err, user) => {
       if (err || !user) {
+        console.error("Google Authentication Error:", err);
         /**Wymaga dodatkowego przetestowania po podłaczeniu frontend */
         return res.redirect(`${process.env.FRONTEND_URL}/?error=login_failed`);
       }
+
+      console.log("Google login successful, user:", user);
+
+      if (!user) {
+      user = await UserModel.create({
+        googleId: req.user.id,
+        email: req.user.emails[0].value,
+        displayName: req.user.displayName,
+        photo: req.user.photos[0].value,
+        balance: 0,
+        transactions: [],
+      });
+    }
 
       const newSession = await SessionModel.create({
         uid: user._id,
@@ -219,6 +233,9 @@ googleLogin: passport.authenticate("google", {
         process.env.JWT_REFRESH_SECRET,
         { expiresIn: process.env.JWT_REFRESH_EXPIRE_TIME }
       );
+
+      console.log("Generated Access Token:", accessToken);
+      console.log("Generated Refresh Token:", refreshToken);
 
       res.redirect(
         /**Wymaga dodatkowego przetestowania po podłaczeniu frontend */

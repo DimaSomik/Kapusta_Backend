@@ -15,7 +15,9 @@ const userSchema = new Schema(
     },
     passwordHash: {
       type: String,
-      required: [true, "Password is required"],
+      required: function () {
+        return !this.googleId;
+      },
     },
     googleId: {
       type: String,
@@ -23,7 +25,9 @@ const userSchema = new Schema(
     },
     originUrl: {
       type: String,
-      required: [true, "Origin is required"],
+      required: function () {
+        return !this.googleId;
+      },
     },
     balance: {
       type: Number,
