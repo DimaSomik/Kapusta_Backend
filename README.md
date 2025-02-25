@@ -2,7 +2,7 @@
 
 ## 🛠️ Tech Stack
 
-This is the backend repository for the Kapusta project.
+This is the backend repository for the Kapusta project
 
 🔗 [Check out the repository](https://github.com/DimaSomik/Kapusta_Backend)
 
